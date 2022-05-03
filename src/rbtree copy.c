@@ -148,7 +148,6 @@ node_t *rbtree_find(const rbtree *t, const key_t key) {
   }
   return NULL;
 }
-
 node_t *rbtree_min(const rbtree *t) {
   node_t *ptr = t->root;
   while (ptr->left != t->nil)
@@ -172,7 +171,7 @@ void rbtree_transplant(rbtree *t, node_t *u, node_t *v) {
   if(u->parent == t->nil)
     t->root = v;
   else if (u == u->parent->left)
-    u->parent->left = v;
+    u->parent->left;
   else u->parent->right = v;
     v->parent = u->parent;
 }
@@ -190,42 +189,27 @@ node_t *rbtree_p_right_min(const rbtree *t, node_t *n) {
 
 // 추가된 함수
 void rbtree_erase_fixup(rbtree *t, node_t *x) {
-// x는 삭제된 노드의 대체 노드, w는 x의 형제(sibling)를 가리키는 포인터
-// x가 빨간색이 되면 검정색으로 칠하고 종료
-// while
   node_t *w;
   while (x!= t->root && x->color == RBTREE_BLACK) {
-    // case x->parent->left : x가 새로운 부모의 왼쪽 자식일 때
     if (x == x->parent->left) {
-      // w는 부모의 오른쪽 자식
       w = x->parent->right;
-      // case 1: 'w' sibling is red
-      // 형제를 블랙, 부모를 레드, 부모 기준으로 좌회전
-      // 형제를 재설정, 그러나 기존 형제red의 자식(bk)이 형제가 되어서 다시 루프
-      // case 2, 3, 4 로 변환됨.
       if (w->color == RBTREE_RED) {
         w->color = RBTREE_BLACK;
         x->parent->color = RBTREE_RED;
         left_rotate(t, x->parent);
         w = x->parent->right;
       }
-      // case 2: 'w' sibling is balck and its children are both black
-      // 삼촌을 레드, x를 x의 부모로 변경
       if (w->left->color == RBTREE_BLACK && w->right->color == RBTREE_BLACK) {
         w->color = RBTREE_RED;
         x = x->parent;
       } 
       else {
-        // case 3: 'w' sibling has right black child
-        // 형제의 왼쪽 레드 자식을 블랙, 형제 자신을 레드로 변환
-        // 형제를 기준으로 우회전
         if (w->right->color == RBTREE_BLACK) {
           w->left->color = RBTREE_BLACK;
           w->color = RBTREE_RED;
           right_rotate(t, w);
           w = x->parent->right;
         }
-        // case 4: 형제 색이 그의 부모 색과
         w->color = x->parent->color;
         x->parent->color = RBTREE_BLACK;
         w->right->color = RBTREE_BLACK;
@@ -234,7 +218,6 @@ void rbtree_erase_fixup(rbtree *t, node_t *x) {
       }
     }
     else {
-    // (x == x->parent->right)
       w = x->parent->left;
       if (w->color == RBTREE_RED) {
         w->color = RBTREE_BLACK;
@@ -269,9 +252,9 @@ int rbtree_erase(rbtree *t, node_t *p) {
   color_t y_og_color = y->color;
   node_t *x;
 
-  if (p->left == t->nil){
+  if (p->left = t->nil){
     x = p->right;
-    rbtree_transplant(t, p, p->right);
+    rbtree_transplant(t, p, p->left);
   }
   else if (p->right == t->nil){
     x = p->left;
@@ -296,8 +279,9 @@ int rbtree_erase(rbtree *t, node_t *p) {
   y->color = p->color;
   }
 
-  if(y_og_color == RBTREE_BLACK)
+  if(y_og_color == RBTREE_BLACK);
     rbtree_erase_fixup(t, x);
+
 
   free(p);
   return 0;
@@ -319,7 +303,6 @@ int inorder_tree_work(const rbtree *t, const node_t *x, key_t *arr, int i) {
 
 int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) {
 
-  inorder_tree_work(t, t->root, arr, 0);
   return 0;
 }
 
